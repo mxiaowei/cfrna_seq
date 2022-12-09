@@ -1,0 +1,23 @@
+j=10
+echo ${j}
+
+for i in `grep SRR nature_plasma_id.txt`
+do
+
+
+##qc
+fastp -i ./raw/${i}_1.fastq.gz  -o  ./trim/${i}_trim_1.fastq.gz -I ./raw/${i}_2.fastq.gz \
+-O ./trim/${i}_trim_2.fastq.gz -w ${j} -j ./trim/${i}.json -h ./trim/${i}.html -q 20 --length_required 20
+
+#remove rrna
+bowtie2 --fr -x ~/index/bowtieindex/bowtie2_rrna_index/rRNA --un-conc-gz ./nonrna/${i}_norna.fastq.gz \
+-1 ./trim/${i}_trim_1.fastq.gz -2 ./trim/${i}_trim_2.fastq.gz -p 18 -S ${i}_rRNA.sam; rm ${i}_rRNA.sam;
+
+
+##star map
+
+
+
+
+
+done
